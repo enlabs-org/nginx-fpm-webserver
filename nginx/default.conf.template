@@ -1,0 +1,17 @@
+server {
+    listen 0.0.0.0:80;
+
+    index index.php index.html index.htm;
+    root ${NGINX_WEBROOT};
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass ${NGINX_FPM_HOST}:${NGINX_FPM_PORT};
+        fastcgi_index ${NGINX_FPM_INDEX};
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    }
+}
